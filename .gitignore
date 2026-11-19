@@ -1,0 +1,32 @@
+# Terraform working dirs and state (state can contain secrets!)
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+tfplan
+
+# Variable files often contain secrets — commit only *.tfvars.example
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# CLI override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Credentials
+*.pem
+*credentials*
+sa-key*.json
+.env
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

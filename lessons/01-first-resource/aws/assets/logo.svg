@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" width="240" height="120">
+  <rect width="240" height="120" rx="16" fill="#1e1b4b"/>
+  <!-- gamepad -->
+  <rect x="20" y="38" width="64" height="44" rx="20" fill="#a78bfa"/>
+  <rect x="34" y="55" width="16" height="6" fill="#1e1b4b"/>
+  <rect x="39" y="50" width="6" height="16" fill="#1e1b4b"/>
+  <circle cx="64" cy="54" r="4" fill="#f472b6"/>
+  <circle cx="72" cy="62" r="4" fill="#34d399"/>
+  <text x="96" y="56" font-family="monospace" font-size="15" fill="#f5f3ff">The Little</text>
+  <text x="96" y="78" font-family="monospace" font-size="19" font-weight="bold" fill="#fbbf24">Gamestore</text>
+</svg>
