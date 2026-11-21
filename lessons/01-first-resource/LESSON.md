@@ -19,13 +19,13 @@ By the end of this lesson you'll have:
 For learning, use a dedicated IAM user. Don't use your root account.
 
 1. Sign in to the AWS console as root or as an admin.
-2. **IAM → Users → Create user** → name: `terraform-learner`.
+2. **IAM → Users → Create user** → name: `carlos-cli`.
 3. Permissions: **Attach policies directly** → `AdministratorAccess`.
    *(Broad, but fine for a personal learning account. In real projects you'd use least privilege.)*
 4. Open the user → **Security credentials → Create access key** → use case "Command Line Interface (CLI)".
 5. In your terminal:
    ```bash
-   aws configure --profile gamestore
+   aws configure --profile carlos-cli
    # Access key ID:      <paste>
    # Secret access key:  <paste>
    # Default region:     eu-central-1
@@ -33,13 +33,13 @@ For learning, use a dedicated IAM user. Don't use your root account.
    ```
 6. Check that it works:
    ```bash
-   aws sts get-caller-identity --profile gamestore
+   aws sts get-caller-identity --profile carlos-cli
    ```
-   You should see the ARN `arn:aws:iam::<account-id>:user/terraform-learner`.
+   You should see the ARN `arn:aws:iam::<account-id>:user/carlos-cli`.
 
 > 💸 **Recommended:** go to **Billing → Budgets → Create budget → "Zero spend budget"**. AWS will email you as soon as anything costs money.
 
-> 🔐 Never put access keys in `.tf` files. Terraform will read the `gamestore` profile.
+> 🔐 Never put access keys in `.tf` files. Terraform will read the `carlos-cli` profile.
 
 ### Step 1: Your turn: write the code
 
@@ -72,7 +72,7 @@ terraform {
 ```hcl
 provider "aws" {
   region  = # TODO: eu-central-1
-  profile = # TODO: the CLI profile you just created
+  profile = # TODO: your CLI profile ("carlos-cli")
 
   default_tags {
     tags = {
@@ -120,8 +120,8 @@ Then check your work:
 ```bash
 terraform state list
 terraform show
-aws s3 ls --profile gamestore
-aws s3 ls s3://<your-bucket-name>/brand/ --profile gamestore
+aws s3 ls --profile carlos-cli
+aws s3 ls s3://<your-bucket-name>/brand/ --profile carlos-cli
 ```
 
 ### Step 3: Experiment (5 min, this is where you learn)
