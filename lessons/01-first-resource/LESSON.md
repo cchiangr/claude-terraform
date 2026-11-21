@@ -140,6 +140,63 @@ terraform destroy
 
 **When you're done, tell me and paste your `main.tf`, and I'll review it.** After that you get the theory and exam corner for this part.
 
+### 🧠 Theory: what you just used
+
+**The core workflow**
+
+| Command | What it does |
+|---|---|
+| `init` | Downloads providers into `.terraform/`, writes `.terraform.lock.hcl`, sets up the backend. Run it first, and again after adding providers or modules. |
+| `validate` | Checks syntax and internal consistency. Offline: it doesn't contact AWS. |
+| `plan` | Refreshes state from the real world, compares it with your code, shows the difference. |
+| `apply` | Runs a plan (or a saved one: `plan -out=tfplan` → `apply tfplan`). |
+| `destroy` | Deletes everything tracked in state, in reverse dependency order. |
+| `fmt` | Rewrites files in the standard style. `fmt -check` is for CI. |
+
+**Plan symbols**
+
+| Symbol | Meaning | You saw it when… |
+|---|---|---|
+| `+` | create | first apply |
+| `~` | update in-place | logo content (etag) changed; tag changed |
+| `-/+` | destroy, then create (replace) | `length` changed → `# forces replacement` |
+| `-` | destroy | `terraform destroy` |
+| `<=` | read (data source) | lesson 4 |
+
+**Providers.** These are plugins that translate HCL into API calls. `required_providers` says *which* providers and versions you need (`source` = `namespace/name` on the registry). The `provider` block *configures* one, with things like region, credentials and default tags. `~> 6.0` means `>= 6.0, < 7.0`, and `~> 3.6.1` would mean `>= 3.6.1, < 3.7.0`.
+
+**The lock file** (`.terraform.lock.hcl`) records the exact provider versions and their checksums. **Commit it** so everyone gets the same versions. Run `terraform init -upgrade` to move to newer versions that the constraints allow.
+
+**State** (`terraform.tfstate`) is Terraform's memory: it maps `aws_s3_bucket.assets` to the real bucket `little-gamestore-assets-coherent-garfish`. Without it, Terraform doesn't know what it owns. It's stored in plain text and can contain secrets, so **never commit it**. Lesson 6 moves it to a remote backend.
+
+**Dependencies.** Referencing another resource (`aws_s3_bucket.assets.id`) creates an **implicit dependency**: Terraform builds a graph, creates things in dependency order, runs independent ones in parallel, and destroys in reverse. `depends_on` (explicit) is only for hidden dependencies that Terraform can't see in your code.
+
+**`path.module`** is the folder of the current module. Use it for every local file path, so the code works no matter where `terraform` is run from.
+
+### 📝 Exam corner
+
+1. You add a new provider to `required_providers`. What must you run before `plan` works?
+2. Which command checks configuration syntax **without** accessing any remote API?
+3. A teammate's `apply` installed AWS provider 6.20 while you got 6.14. Which file prevents this, and should it be committed?
+4. What does the version constraint `~> 1.4.0` allow?
+5. True or false: `terraform destroy` requires the state file to know what to delete.
+6. In a plan you see `-/+ resource "aws_s3_bucket" "assets"` with `# forces replacement` next to `bucket`. What will happen to the files inside the bucket?
+
+<details><summary>Answers</summary>
+
+1. `terraform init` (it downloads the new provider).
+2. `terraform validate`.
+3. `.terraform.lock.hcl`, and yes, commit it.
+4. `>= 1.4.0` and `< 1.5.0` (only the rightmost number may increase).
+5. True. Terraform only manages what is recorded in state.
+6. The old bucket is deleted and a new empty one is created. Data not managed by Terraform is lost (and the delete fails if the bucket isn't empty, unless `force_destroy = true`).
+
+</details>
+
+### 🧪 Challenge (optional)
+
+Upload a second file, `assets/welcome.txt` with the text "Welcome to The Little Gamestore!", under the key `brand/welcome.txt`. Then make the `random_pet` use `separator = "_"`, run `plan` and then `apply`. Why does `plan` look fine, but `apply` fails? (Hints: S3 bucket naming rules, and *when* is the pet name known?) Set the separator back afterwards.
+
 ---
 
 ## Part 2: STACKIT

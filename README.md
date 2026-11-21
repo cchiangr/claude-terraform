@@ -18,7 +18,7 @@ Goal: **HashiCorp Certified Terraform Associate (004)** and the skills to build 
 | # | Lesson | AWS | STACKIT |
 |---|--------|:---:|:-------:|
 | **Part A: Fundamentals** ||||
-| 01 | Setup & first resource: the shop's logo bucket | ⬜ | ⬜ |
+| 01 | Setup & first resource: the shop's logo bucket | ✅ | ⬜ |
 | 02 | The storefront: static website | ⬜ | ⬜ |
 | 03 | Make it configurable: variables, locals, outputs | ⬜ | ⬜ |
 | 04 | Network for the shop | ⬜ | ⬜ |
